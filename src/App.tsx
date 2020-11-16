@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Quiz from "./pages/quiz";
 import "./App.css";
 import Criteria from "./pages/criteria"
-
-
+import Heart from "./assets/heart.png"
 function App() {
   const [criteria, setCriteria] = useState("");
   const [difficulty, setDifficulty] = useState("");
@@ -22,6 +21,7 @@ function App() {
     <div className="App">
       {startQuiz === false ? <Criteria callback={handleClick} /> :
         <Quiz criteria={criteria} difficulty={difficulty} callback={callback} questionsNo={questions} />}
+      <div className="footer"><h4>Made with <img src={Heart} height="17px" width="20px"  alt=""/> by <strong><a href="https://devtanzeel.web.app" rel="noopener noreferrer" target="_blank" style={{ textDecoration: 'none' }}>TANZEEL UR REHMAN</a></strong>.</h4></div>
     </div>
   );
 }
