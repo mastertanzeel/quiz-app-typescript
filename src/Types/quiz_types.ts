@@ -22,3 +22,13 @@ export type questionPropsType = {
   buttonText: string;
   callback: (e: React.FormEvent<EventTarget>, ans: string) => void;
 };
+export type quizProps = {
+  questionsNo: number;
+  criteria: string;
+  difficulty: string;
+  callback: (e: React.FormEvent<EventTarget>) => void;
+
+};export type criteriaProps = {
+  callback: (criteria: string, difficulty: string, questions: number) => void;
+
+};

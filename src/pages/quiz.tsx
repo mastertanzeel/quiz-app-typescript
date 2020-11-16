@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { getQuizdetails } from '../services/quiz-service';
-import { QuestionType } from '../Types/quiz_types';
-import Loader from "../assets/loading.gif"
+import { QuestionType, quizProps } from '../Types/quiz_types';
+import Loader from "../assets/loader1.gif"
 import QuestionCard from '../Components/QuestionCard';
 import { Grid, Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
-    marginAutoContainer: {
-        width: 500,
-        height: 80,
-        display: 'flex',
-        backgroundColor: 'gold',
-    },
-    marginAutoItem: {
-        margin: 'auto'
-    },
+
+const useStyles = makeStyles(() => ({
     alignItemsAndJustifyContent: {
         width: '100%',
         height: '100%',
@@ -24,7 +16,8 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
     },
 }))
-export default function Quiz() {
+const Quiz: React.FC<quizProps> = ({ questionsNo, difficulty, criteria, callback }) => {
+
     let [quiz, setQuiz] = useState<QuestionType[]>([])
     let [currentStep, setCurrentStep] = useState(0)
     let [score, setscore] = useState(0)
@@ -35,11 +28,11 @@ export default function Quiz() {
 
     useEffect(() => {
         async function fetchdata() {
-            const questions: QuestionType[] = await getQuizdetails(5, 'easy');
+            const questions: QuestionType[] = await getQuizdetails(questionsNo, difficulty, criteria);
             setQuiz(questions)
         }
         fetchdata();
-    }, [])
+    }, [questionsNo, difficulty, criteria])
 
     const handleSubmit = (e: React.FormEvent<EventTarget>, userAns: string) => {
         currentStep !== quiz.length - 2 ? setButtonText("Next") : setButtonText("Submit")
@@ -55,9 +48,9 @@ export default function Quiz() {
         }
     }
     if (!quiz.length) {
-        return (<div className={classes.alignItemsAndJustifyContent}>
-            <img src={Loader} alt="loading" height="100px" width='100px' />
-            </div>)
+        return (<div style={{ textAlign: 'center' }}>
+            <img src={Loader} alt="loading" height="50%" style={{ marginTop: window.innerWidth > 720 ? '100px' : '60%' }} width='50%' />
+        </div>)
     }
     if (showResult) {
         return (<div className={classes.alignItemsAndJustifyContent}>
@@ -71,6 +64,7 @@ export default function Quiz() {
                         variant="contained"
                         color="secondary"
                         fullWidth
+                        onClick={callback}
                     >
                         <strong>Attemp Again</strong>
                     </Button></Grid> </Grid></div>)
@@ -78,7 +72,7 @@ export default function Quiz() {
 
     return (
         <div>
-            <h1>Quizier</h1>
+            <h1><strong>Quiz Guru</strong></h1>
             <h3 className="heading">{currentStep + 1}/{quiz.length}</h3>
             <QuestionCard
                 option={quiz[currentStep].option}
@@ -89,4 +83,5 @@ export default function Quiz() {
         </div>
     )
 }
+export default Quiz;
 
